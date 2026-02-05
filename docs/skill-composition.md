@@ -46,7 +46,7 @@ Skills pass artifacts down the SDLC. A producer skill's output becomes the input
 
 ```mermaid
 flowchart TD
-    PP["project-planner<br/>Implementation plan"] --> TD["task-decomposition<br/>Atomic tasks"]
+    PP["project-planner<br/>Module map, risks,<br/>acceptance criteria"] --> TD["task-decomposition<br/>Atomic tasks"]
     SA["system-architecture<br/>ADRs, layer decisions"] --> BE["python-backend-expert"]
     SA --> FE["react-frontend-expert"]
     AD["api-design-patterns<br/>API contracts"] --> BE
@@ -59,7 +59,7 @@ flowchart TD
 
 | Producer | Artifact | Consumer |
 |----------|----------|----------|
-| `project-planner` | Implementation plan | `task-decomposition` |
+| `project-planner` | Module map, risks, acceptance criteria | `task-decomposition` |
 | `system-architecture` | Architecture decisions, ADRs | `python-backend-expert`, `react-frontend-expert` |
 | `api-design-patterns` | API contracts, schema conventions | `python-backend-expert`, `react-frontend-expert` |
 | `python-backend-expert` | Backend code | `pytest-patterns` |

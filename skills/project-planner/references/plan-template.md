@@ -16,7 +16,13 @@ Use this template when producing an implementation plan for a feature, enhanceme
 
 - **Triggered by:** [User story / feature request / bug report / tech debt]
 - **Related work:** [Links to related plans, ADRs, or PRs]
-- **Open questions:** [List any ambiguities that need resolution before implementation]
+
+## Open Questions
+
+<!-- List ambiguities that need resolution before implementation -->
+
+1. [Question 1]
+2. [Question 2]
 
 ## Affected Modules
 
@@ -42,47 +48,7 @@ Use this template when producing an implementation plan for a feature, enhanceme
 **Change Types:** New file, Modify, Delete, Rename
 **Impact:** Migration, API change, UI change, Config change, None
 
-## Task List
-
-<!-- Ordered implementation tasks with dependencies -->
-
-### Task 1: [Title]
-- **Files:** [files to create or modify]
-- **Preconditions:** None
-- **Steps:**
-  1. [Specific action]
-  2. [Specific action]
-- **Done when:** [verification command + expected output]
-- **Complexity:** [trivial / small / medium / large]
-
-### Task 2: [Title]
-- **Files:** [files to create or modify]
-- **Preconditions:** Task 1
-- **Steps:**
-  1. [Specific action]
-  2. [Specific action]
-- **Done when:** [verification command + expected output]
-- **Complexity:** [trivial / small / medium / large]
-
-<!-- Add more tasks as needed -->
-
-## Task Dependency Graph
-
-<!-- Visual representation of task ordering -->
-
-```
-Task 1 (model) ──> Task 2 (schema) ──> Task 4 (route)
-                                    ↗
-Task 3 (service) ──────────────────
-                                    ↘
-                                     Task 5 (frontend) ──> Task 6 (integration)
-```
-
 ## Verification
-
-### Per-Task Verification
-
-Each task includes its own `Done when` verification. Run these as you complete each task.
 
 ### Integration Verification
 
@@ -129,13 +95,15 @@ Each task includes its own `Done when` verification. Run these as you complete e
 
 | Metric | Value |
 |--------|-------|
-| Total tasks | [N] |
-| Estimated complexity | [trivial / small / medium / large] |
-| Backend tasks | [N] |
-| Frontend tasks | [N] |
-| Test tasks | [N] |
+| Backend modules affected | [N] |
+| Frontend modules affected | [N] |
 | Migration required | [Yes / No] |
 | API changes | [Yes / No] |
+| Overall complexity | [trivial / small / medium / large] |
+
+## Next Step
+
+Pass this plan to `/task-decomposition` to break it into atomic implementation tasks with persistent tracking files (`task_plan.md`, `progress.md`, `findings.md`).
 
 ## Notes
 

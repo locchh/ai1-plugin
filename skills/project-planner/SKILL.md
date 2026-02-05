@@ -4,15 +4,16 @@ description: >-
   Project planning and feature breakdown for Python/React full-stack projects.
   Use during the planning phase when breaking down feature requests, user stories,
   or product requirements into implementation plans. Guides identification of affected
-  files and modules, defines acceptance criteria, maps task dependencies, and estimates
-  complexity. Produces structured task lists with file paths and verification steps.
-  Does NOT cover architecture decisions (use system-architecture) or implementation
-  (use python-backend-expert or react-frontend-expert).
+  files and modules, defines acceptance criteria, assesses risks, and estimates
+  overall complexity. Produces module maps, risk assessments, and acceptance criteria.
+  Does NOT cover architecture decisions (use system-architecture), implementation
+  (use python-backend-expert or react-frontend-expert), or atomic task decomposition
+  (use task-decomposition).
 license: MIT
 compatibility: 'Python 3.12+, React 18+, FastAPI, SQLAlchemy, TypeScript'
 metadata:
   author: platform-team
-  version: '1.0.0'
+  version: '2.0.0'
   sdlc-phase: planning
 allowed-tools: Read Grep Glob
 context: fork
@@ -23,24 +24,24 @@ context: fork
 ## When to Use
 
 Activate this skill when:
-- Breaking down a feature request or user story into implementation tasks
+- Breaking down a feature request or user story into an implementation plan
 - Sprint planning or backlog refinement for a Python/React project
 - Designing a new module, service, or feature area
-- Estimating the complexity of a proposed change
-- Identifying file-level dependencies before starting implementation
+- Estimating the overall complexity of a proposed change
+- Identifying file-level impact before starting implementation
 - Mapping the impact of a change across backend and frontend layers
 
 Do NOT use this skill for:
 - Architecture decisions or technology trade-offs (use `system-architecture`)
 - Writing implementation code (use `python-backend-expert` or `react-frontend-expert`)
 - API contract design (use `api-design-patterns`)
-- Task decomposition into atomic sub-tasks (use `task-decomposition`)
+- Decomposing into atomic implementation tasks (use `task-decomposition`)
 
 ## Instructions
 
 ### Planning Workflow
 
-Follow this 5-step workflow for every planning request:
+Follow this 4-step workflow for every planning request:
 
 #### Step 1: Analyze the Requirement
 
@@ -86,43 +87,25 @@ Present the module map as a table:
 | Frontend | hooks/useUser.ts| Update query      | UI change |
 ```
 
-#### Step 3: Decompose into Tasks
+#### Step 3: Define Verification Criteria
 
-Break the feature into ordered implementation tasks. Each task must:
-- Touch at most 3 files
-- Have a single, clear outcome
-- Include a verification command (pytest, npm test, or manual check)
-- List explicit preconditions (which other tasks must complete first)
+Define how the completed feature will be verified:
 
-Use this format for each task:
-
-```
-### Task [N]: [Title]
-- **Files:** [list of files to create or modify]
-- **Preconditions:** [task numbers that must be done first, or "None"]
-- **Steps:**
-  1. [Specific action]
-  2. [Specific action]
-- **Done when:** [concrete verification — command + expected output]
-- **Complexity:** [trivial / small / medium / large]
-```
-
-#### Step 4: Define Verification Steps
-
-For each task, specify:
-- **Command to run:** `pytest tests/unit/test_user.py -x` or `npm test -- --grep "UserProfile"`
-- **What to check:** Expected status code, UI element, database state
-- **Expected output:** Specific assertion or observable result
-
-For the overall feature, define integration verification:
+**Integration verification:**
 - End-to-end test scenario describing the complete user flow
 - Manual smoke test steps if automated E2E is not available
 
-#### Step 5: Identify Risks and Unknowns
+**Regression check:**
+- Existing tests still pass: `pytest -x && npm test`
+- No type errors: `mypy src/ && npx tsc --noEmit`
+- No lint issues: `ruff check src/ && npm run lint`
+
+#### Step 4: Identify Risks and Unknowns
 
 Flag potential issues using the categories below. For each risk:
 - **Risk:** Description of what could go wrong
 - **Likelihood:** Low / Medium / High
+- **Impact:** Low / Medium / High
 - **Mitigation:** How to reduce or eliminate the risk
 
 See `references/risk-assessment-checklist.md` for the complete risk category list.
@@ -137,46 +120,48 @@ Produce a plan document with this structure (or see `references/plan-template.md
 ## Objective
 [1-2 sentence summary of what this delivers]
 
+## Context
+- Triggered by: [user story / feature request / bug report]
+- Related work: [links to related plans, ADRs, or PRs]
+
+## Open Questions
+[List ambiguities that need resolution before implementation]
+
 ## Affected Modules
 [Module map table from Step 2]
 
-## Task List
-[Ordered tasks from Step 3]
-
 ## Verification
-[Integration verification from Step 4]
+[Integration verification from Step 3]
 
 ## Risks & Unknowns
-[Risk table from Step 5]
+[Risk table from Step 4]
 
 ## Acceptance Criteria
 [Bullet list of observable outcomes that confirm the feature works]
+
+## Estimation Summary
+[Overall complexity estimate — see table below]
 ```
 
-### Estimation Heuristics
+**Note:** This plan does not include atomic implementation tasks. Pass this plan to `/task-decomposition` to break it into ordered, independently-verifiable tasks with persistent tracking files.
 
-Use these guidelines to estimate task complexity:
+### Estimation Summary
 
-| Complexity | Files | Lines Changed | Tests Needed          | Migration |
-|-----------|-------|--------------|----------------------|-----------|
-| Trivial   | 1     | <20          | None                 | No        |
-| Small     | 1-2   | <100         | Unit tests           | No        |
-| Medium    | 3-5   | <300         | Unit + integration   | Maybe     |
-| Large     | 6+    | 300+         | Full test suite      | Likely    |
+Estimate overall feature complexity using this table:
 
-Overall feature complexity = highest individual task complexity + integration overhead.
+| Metric | Value |
+|--------|-------|
+| Total backend modules affected | [N] |
+| Total frontend modules affected | [N] |
+| Migration required | Yes / No |
+| API changes | Yes / No (new endpoints / modified contracts) |
+| Overall complexity | trivial / small / medium / large |
 
-### Dependency Mapping Rules
-
-When ordering tasks, follow these dependency rules:
-
-1. **Database model changes** must precede service layer changes
-2. **Alembic migrations** must be created and tested before code that depends on new schema
-3. **Backend API endpoints** must precede frontend integration
-4. **Shared types** must precede both backend and frontend code
-5. **Service layer** must precede route handlers
-6. **Tests** should follow implementation of each layer (not all at the end)
-7. **Configuration changes** (.env, settings) should come early if other tasks depend on them
+Complexity guidelines:
+- **Trivial:** 1-2 modules, no migration, <50 lines
+- **Small:** 2-4 modules, no migration, <200 lines
+- **Medium:** 4-8 modules, migration possible, <500 lines
+- **Large:** 8+ modules, migration likely, 500+ lines
 
 ## Examples
 
@@ -196,64 +181,44 @@ When ordering tasks, follow these dependency rules:
 | Frontend | hooks/useUploadAvatar.ts | New hook       | Data fetch   |
 | Frontend | pages/ProfilePage.tsx    | Integrate      | UI change    |
 
-**Task List:**
-
-### Task 1: Add avatar_url to User model
-- **Files:** models/user.py, migrations/
-- **Preconditions:** None
-- **Steps:** Add `avatar_url: Mapped[str | None]` to User model, generate Alembic migration
-- **Done when:** `alembic upgrade head` succeeds, `avatar_url` column exists in DB
-- **Complexity:** small
-
-### Task 2: Update User schemas
-- **Files:** schemas/user.py
-- **Preconditions:** Task 1
-- **Steps:** Add `avatar_url` to `UserResponse` schema
-- **Done when:** `pytest tests/unit/test_schemas.py -x` passes
-- **Complexity:** trivial
-
-### Task 3: Create upload service
-- **Files:** services/upload.py, tests/unit/test_upload.py
-- **Preconditions:** Task 1
-- **Steps:** Implement file validation (type, size), storage (local or S3), URL generation
-- **Done when:** `pytest tests/unit/test_upload.py -x` passes
-- **Complexity:** medium
-
-### Task 4: Add upload endpoint
-- **Files:** routes/users.py, tests/integration/test_users.py
-- **Preconditions:** Tasks 2, 3
-- **Steps:** Add `POST /users/{id}/avatar` endpoint accepting multipart/form-data
-- **Done when:** `pytest tests/integration/test_users.py -x` passes with upload test
-- **Complexity:** small
-
-### Task 5: Create AvatarUpload component
-- **Files:** components/AvatarUpload.tsx, components/AvatarUpload.test.tsx
-- **Preconditions:** Task 4
-- **Steps:** File picker, preview, upload via useMutation, progress indicator
-- **Done when:** `npm test -- --grep "AvatarUpload"` passes
-- **Complexity:** medium
-
-### Task 6: Integrate into ProfilePage
-- **Files:** pages/ProfilePage.tsx, hooks/useUploadAvatar.ts
-- **Preconditions:** Task 5
-- **Steps:** Add AvatarUpload to profile page, create upload hook with TanStack Query
-- **Done when:** `npm test -- --grep "ProfilePage"` passes, avatar displays after upload
-- **Complexity:** small
+**Verification:**
+- Upload an image via the profile page, verify it displays
+- Upload an oversized file, verify rejection with error message
+- Regression: `pytest -x && npm test`
 
 **Risks:**
 - File size limits need validation (server + client) — Medium likelihood — Add early validation
 - S3 permissions may need configuration — Low likelihood — Test with local storage first
 
+**Acceptance Criteria:**
+- User can upload a profile picture from the profile page
+- Uploaded image displays as the user's avatar across the app
+- Files over 5MB are rejected with a clear error message
+- Non-image files are rejected
+- All existing tests pass
+
+**Estimation Summary:**
+
+| Metric | Value |
+|--------|-------|
+| Backend modules affected | 4 |
+| Frontend modules affected | 3 |
+| Migration required | Yes |
+| API changes | Yes (new upload endpoint) |
+| Overall complexity | medium |
+
+**Next step:** Pass this plan to `/task-decomposition` to create atomic implementation tasks.
+
 ## Edge Cases
 
-- **Cross-cutting changes** (auth middleware, error handling, logging): These affect many files. Flag for architecture review before planning tasks. Consider whether the change should be its own plan.
+- **Cross-cutting changes** (auth middleware, error handling, logging): These affect many modules. Flag for architecture review before planning. Consider whether the change should be its own plan.
 
-- **Database migrations with data transformation**: Always plan the migration as a separate task. Test rollback (`alembic downgrade -1`) as part of verification. Never combine migration with code changes in the same task.
+- **Database migrations with data transformation**: Flag as a risk. Note that migration testing (upgrade + rollback) is needed. Task-decomposition will create a dedicated migration task.
 
-- **Frontend state cascades**: When modifying shared state (React Context, TanStack Query cache), map the component tree to identify all consumers. Plan verification for each affected component.
+- **Frontend state cascades**: When modifying shared state (React Context, TanStack Query cache), map the component tree to identify all consumers in the module map.
 
-- **API breaking changes**: If modifying an existing endpoint's contract, check for frontend consumers first. Consider API versioning if external consumers exist. Plan frontend updates in the same sprint.
+- **API breaking changes**: If modifying an existing endpoint's contract, check for frontend consumers first. Consider API versioning if external consumers exist. Note in the plan that frontend updates must be coordinated.
 
-- **Feature flags**: For large features spanning multiple sprints, plan a feature flag as Task 1. All subsequent tasks should be gated behind the flag. Plan flag removal as the final task.
+- **Feature flags**: For large features spanning multiple sprints, note in the plan that a feature flag is needed. Task-decomposition will handle the implementation ordering.
 
-- **Third-party dependency updates**: If the feature requires a new package, plan installation and lockfile updates as a dedicated task. Check for peer dependency conflicts.
+- **Third-party dependency updates**: If the feature requires a new package, list it in the plan's affected modules. Note potential peer dependency conflicts as a risk.
