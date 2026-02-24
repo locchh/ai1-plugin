@@ -1,9 +1,9 @@
 {
-  "name": "ai1-skills",
+  "name": "ai1-plugin",
   "description": "SDLC Agent Skills for Python/React projects — covers planning, architecture, implementation, testing, code review, deployment, and operations",
   "version": "1.0.0",
   "author": {
     "name": "hieutrtr"
   },
-  "repository": "https://github.com/hieutrtr/ai1-skills"
+  "repository": "https://github.com/hieutrtr/ai1-plugin"
 }
