@@ -7,22 +7,22 @@ A **Claude Code plugin** with **17 Agent Skills** covering the full software dev
 ### Claude Code (plugin)
 
 ```bash
-git clone https://github.com/hieutrtr/ai1-skills.git
-claude --plugin-dir ./ai1-skills
+git clone https://github.com/hieutrtr/ai1-plugin.git
+claude --plugin-dir ./ai1-plugin
 ```
 
-Skills are namespaced under `ai1-skills:` to prevent conflicts:
+Skills are namespaced under `ai1-plugin:` to prevent conflicts:
 
 ```
-/ai1-skills:project-planner Plan the user authentication feature
-/ai1-skills:python-backend-expert Create a FastAPI endpoint for user registration
-/ai1-skills:code-review-security Review the auth module for vulnerabilities
+/ai1-plugin:project-planner Plan the user authentication feature
+/ai1-plugin:python-backend-expert Create a FastAPI endpoint for user registration
+/ai1-plugin:code-review-security Review the auth module for vulnerabilities
 ```
 
 ### Other tools (agentskills.sh CLI)
 
 ```bash
-npx skills add hieutrtr/ai1-skills
+npx skills add hieutrtr/ai1-plugin
 ```
 
 | Starting a... | Guide |
@@ -103,19 +103,19 @@ flowchart LR
 Clone the repo and load it as a plugin:
 
 ```bash
-git clone https://github.com/hieutrtr/ai1-skills.git
-claude --plugin-dir ./ai1-skills
+git clone https://github.com/hieutrtr/ai1-plugin.git
+claude --plugin-dir ./ai1-plugin
 ```
 
 To make it permanent, add it to your Claude Code settings:
 
 ```json
 {
-  "pluginDirectories": ["/path/to/ai1-skills"]
+  "pluginDirectories": ["/path/to/ai1-plugin"]
 }
 ```
 
-Run `/help` to verify — all skills appear under the `ai1-skills` namespace.
+Run `/help` to verify — all skills appear under the `ai1-plugin` namespace.
 
 ## Usage
 
@@ -152,14 +152,14 @@ Just ask Claude naturally. The skill descriptions contain phase-specific keyword
 
 ### Direct invocation
 
-When loaded as a Claude Code plugin, invoke skills with the `ai1-skills:` namespace prefix:
+When loaded as a Claude Code plugin, invoke skills with the `ai1-plugin:` namespace prefix:
 
 ```
-/ai1-skills:project-planner Add a payment processing module
-/ai1-skills:python-backend-expert Create CRUD endpoints for orders
-/ai1-skills:code-review-security Review the auth module
-/ai1-skills:pre-merge-checklist Run all quality checks
-/ai1-skills:tdd-workflow Implement the search feature using TDD
+/ai1-plugin:project-planner Add a payment processing module
+/ai1-plugin:python-backend-expert Create CRUD endpoints for orders
+/ai1-plugin:code-review-security Review the auth module
+/ai1-plugin:pre-merge-checklist Run all quality checks
+/ai1-plugin:tdd-workflow Implement the search feature using TDD
 ```
 
 When installed as standalone skills (Option 2/3), use the short form without the prefix:
@@ -308,7 +308,7 @@ This repo is a **native Claude Code plugin** (via `.claude-plugin/plugin.json`).
 
 | Tool | Installation | Skill invocation |
 |------|-------------|-----------------|
-| [Claude Code](https://claude.com/claude-code) | `--plugin-dir` | `/ai1-skills:skill-name` |
+| [Claude Code](https://claude.com/claude-code) | `--plugin-dir` | `/ai1-plugin:skill-name` |
 | [Cursor](https://cursor.sh) | `npx skills add` | `/skill-name` |
 | [GitHub Copilot (VS Code)](https://code.visualstudio.com/docs/copilot/customization/agent-skills) | `npx skills add` | `/skill-name` |
 | [OpenAI Codex](https://developers.openai.com/codex/skills/) | `npx skills add` | `/skill-name` |
