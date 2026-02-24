@@ -1,8 +1,25 @@
-# AI1 Skills — SDLC Agent Skills for Python/React Projects
+# AI1 Plugin — SDLC Agent Plugin for Python/React Projects
 
-A portfolio of **17 Agent Skills** covering the full software development lifecycle for **Python (FastAPI) + React/TypeScript** projects. Built on the [Agent Skills](https://agentskills.io) open standard — works with Claude Code, Cursor, GitHub Copilot, Codex, Windsurf, and other compatible tools.
+A **Claude Code plugin** with **17 Agent Skills** covering the full software development lifecycle for **Python (FastAPI) + React/TypeScript** projects. Also compatible with other tools via the [Agent Skills](https://agentskills.io) open standard.
 
 ## Quick Start
+
+### Claude Code (plugin)
+
+```bash
+git clone https://github.com/hieutrtr/ai1-skills.git
+claude --plugin-dir ./ai1-skills
+```
+
+Skills are namespaced under `ai1-skills:` to prevent conflicts:
+
+```
+/ai1-skills:project-planner Plan the user authentication feature
+/ai1-skills:python-backend-expert Create a FastAPI endpoint for user registration
+/ai1-skills:code-review-security Review the auth module for vulnerabilities
+```
+
+### Other tools (agentskills.sh CLI)
 
 ```bash
 npx skills add hieutrtr/ai1-skills
@@ -12,14 +29,6 @@ npx skills add hieutrtr/ai1-skills
 |---------------|-------|
 | **New project** from scratch | [Greenfield Guide](docs/greenfield.md) — step-by-step from planning to production |
 | **Existing project** adoption | [Brownfield Guide](docs/brownfield.md) — incremental adoption, security-first |
-
-Try these prompts after installing:
-
-```
-"Plan the implementation for adding user authentication"
-"Create a FastAPI endpoint for user registration"
-"Review this code for security vulnerabilities"
-```
 
 See [Skill Composition Guide](docs/skill-composition.md) for how skills relate to each other.
 
@@ -91,62 +100,22 @@ flowchart LR
 
 ## Installation
 
-### Option 1: skills.sh CLI (recommended)
-
-Install the entire skill portfolio with one command:
+Clone the repo and load it as a plugin:
 
 ```bash
-npx skills add hieutrtr/ai1-skills
+git clone https://github.com/hieutrtr/ai1-skills.git
+claude --plugin-dir ./ai1-skills
 ```
 
-This downloads all 17 skills into your project's `.claude/skills/` directory.
+To make it permanent, add it to your Claude Code settings:
 
-To install a single skill:
-
-```bash
-npx skills add hieutrtr/ai1-skills --skill "python-backend-expert"
+```json
+{
+  "pluginDirectories": ["/path/to/ai1-skills"]
+}
 ```
 
-### Option 2: Git clone
-
-Clone the repository directly into your project:
-
-```bash
-# Project-scoped (this project only)
-git clone https://github.com/hieutrtr/ai1-skills.git .claude/skills-repo
-cp -r .claude/skills-repo/skills/* .claude/skills/
-rm -rf .claude/skills-repo
-
-# Personal scope (all your projects)
-git clone https://github.com/hieutrtr/ai1-skills.git ~/.claude/skills-repo
-cp -r ~/.claude/skills-repo/skills/* ~/.claude/skills/
-rm -rf ~/.claude/skills-repo
-```
-
-### Option 3: Manual copy
-
-Download individual skill directories from [github.com/hieutrtr/ai1-skills](https://github.com/hieutrtr/ai1-skills) and place them in one of these locations:
-
-| Scope | Path | Applies To |
-|-------|------|------------|
-| Personal | `~/.claude/skills/<skill-name>/SKILL.md` | All your projects |
-| Project | `.claude/skills/<skill-name>/SKILL.md` | This project only |
-
-### Verify installation
-
-Open Claude Code in your project and ask:
-
-```
-What skills are available?
-```
-
-Claude should list all 17 skills. You can also check context usage:
-
-```
-/context
-```
-
-Expected startup cost: 17 skills x ~100 tokens = ~1,700 tokens for Level 1 metadata.
+Run `/help` to verify — all skills appear under the `ai1-skills` namespace.
 
 ## Usage
 
@@ -183,14 +152,21 @@ Just ask Claude naturally. The skill descriptions contain phase-specific keyword
 
 ### Direct invocation
 
-Invoke any skill directly with its name as a slash command:
+When loaded as a Claude Code plugin, invoke skills with the `ai1-skills:` namespace prefix:
+
+```
+/ai1-skills:project-planner Add a payment processing module
+/ai1-skills:python-backend-expert Create CRUD endpoints for orders
+/ai1-skills:code-review-security Review the auth module
+/ai1-skills:pre-merge-checklist Run all quality checks
+/ai1-skills:tdd-workflow Implement the search feature using TDD
+```
+
+When installed as standalone skills (Option 2/3), use the short form without the prefix:
 
 ```
 /project-planner Add a payment processing module
 /python-backend-expert Create CRUD endpoints for orders
-/code-review-security Review the auth module
-/pre-merge-checklist Run all quality checks
-/tdd-workflow Implement the search feature using TDD
 ```
 
 ## How Skills Work Together
@@ -328,14 +304,15 @@ Claude loads these only when the skill is active and references them.
 
 ## Compatibility
 
-These skills follow the [agentskills.io](https://agentskills.io) core standard and work with:
+This repo is a **native Claude Code plugin** (via `.claude-plugin/plugin.json`). It also follows the [agentskills.io](https://agentskills.io) standard, so the same skills work with other tools when installed via Option 2/3:
 
-- [Claude Code](https://claude.com/claude-code)
-- [Cursor](https://cursor.sh)
-- [GitHub Copilot (VS Code)](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
-- [OpenAI Codex](https://developers.openai.com/codex/skills/)
-- [Windsurf](https://windsurf.com)
-- Other agents supporting the Agent Skills standard
+| Tool | Installation | Skill invocation |
+|------|-------------|-----------------|
+| [Claude Code](https://claude.com/claude-code) | `--plugin-dir` | `/ai1-skills:skill-name` |
+| [Cursor](https://cursor.sh) | `npx skills add` | `/skill-name` |
+| [GitHub Copilot (VS Code)](https://code.visualstudio.com/docs/copilot/customization/agent-skills) | `npx skills add` | `/skill-name` |
+| [OpenAI Codex](https://developers.openai.com/codex/skills/) | `npx skills add` | `/skill-name` |
+| [Windsurf](https://windsurf.com) | `npx skills add` | `/skill-name` |
 
 ## License
 
